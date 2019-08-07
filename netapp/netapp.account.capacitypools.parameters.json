@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "netAppAccounts_name": {
+            "value": "anftest1"
+        },
+        "netAppAccounts_location": {
+            "value": "westeurope"
+        },
+        "netAppAccounts_capacityPool_name": {
+            "value": "capacity-pool-1"
+        },
+        "netAppAccounts_capacityPool_servicelevel": {
+            "value": "Standard"
+        },
+        "netAppAccounts_capacityPool_size": {
+            "value": 4398046511104
+        }
+    }
+}

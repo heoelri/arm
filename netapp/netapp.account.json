@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "netAppAccounts_name": {
+            "defaultValue": "anftest1",
+            "type": "string"
+        },
+        "netAppAccounts_location": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "allowedValues": [
+                "australiaeast",
+                "centralus",
+                "eastus",
+                "eastus2",
+                "northeurope",
+                "westeurope",
+                "southcentralus",
+                "westus2"
+            ]
+        }       
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.NetApp/netAppAccounts",
+            "apiVersion": "2019-05-01",
+            "comments": "NetApp Account Definition",
+            "name": "[parameters('netAppAccounts_name')]",
+            "location": "[parameters('netAppAccounts_location')]",
+            "properties": {}
+        }
+    ],
+    "outputs": {
+        "netAppAccounts_name": {
+            "value": "[parameters('netAppAccounts_name')]",
+            "type": "string"
+        },
+        "netAppAccounts_location": {
+            "value": "[parameters('netAppAccounts_location')]",
+            "type": "string"
+        }
+    }
+}

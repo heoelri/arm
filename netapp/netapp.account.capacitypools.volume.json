@@ -1,0 +1,86 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "netAppAccounts_name": {
+            "defaultValue": "anftest1",
+            "type": "string"
+        },
+        "netAppAccounts_location": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "allowedValues": [
+                "australiaeast",
+                "centralus",
+                "eastus",
+                "eastus2",
+                "northeurope",
+                "westeurope",
+                "southcentralus",
+                "westus2"
+            ]
+        },
+        "netAppAccounts_capacityPool_name": {
+            "defaultValue": "capacity-pool-1",
+            "type": "string"
+        },   
+        "netAppAccounts_volume_name": {
+            "defaultValue": "volume-1",
+            "type": "string"
+        },
+        "virtualNetworks_vnet_subnetid": {
+            "defaultValue": "default",
+            "type": "string"
+        },
+        "netAppAccounts_capacityPool_servicelevel": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "Standard",
+                "Premium",
+                "Ultra"
+            ],
+            "metadata": {
+                "description": "The service level of the file system. - Standard, Premium, Ultra"
+            }
+        },
+        "netAppAccounts_capacityPool_usageThreshold": {
+            "type": "int",
+            "defaultValue": 1073741824000,
+            "minValue": 107374182400,
+            "metadata": {
+                "description": "Maximum storage quota allowed for a file system in bytes. This is a soft quota used for alerting only. Minimum size is 100 GiB. Upper limit is 100TiB. Specified in bytes."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+        "type": "Microsoft.NetApp/netAppAccounts/capacityPools/volumes",
+        "apiVersion": "2019-05-01",
+        "name": "[concat(parameters('netAppAccounts_name'), '/', parameters('netAppAccounts_capacityPool_name') ,'/', parameters('netAppAccounts_volume_name'))]",
+        "location": "[parameters('netAppAccounts_location')]",
+        "comments": "NetApp Volume Definition",
+        "properties": {
+            "serviceLevel": "[parameters('netAppAccounts_capacityPool_servicelevel')]",
+            "creationToken": "[uniqueString(concat(parameters('netAppAccounts_name'), '/', parameters('netAppAccounts_capacityPool_name') ,'/', parameters('netAppAccounts_volume_name')))]",
+            "usageThreshold": "[parameters('netAppAccounts_capacityPool_usageThreshold')]",
+            "exportPolicy": {
+                "rules": [
+                    {
+                        "ruleIndex": 1,
+                        "unixReadOnly": false,
+                        "unixReadWrite": true,
+                        "cifs": false,
+                        "nfsv3": true,
+                        "nfsv4": false,
+                        "allowedClients": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "subnetId": "[parameters('virtualNetworks_vnet_subnetid')]"
+        }
+    }
+    ],
+    "outputs": {}
+}

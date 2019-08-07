@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "netAppAccounts_name": {
+            "defaultValue": "anftest1",
+            "type": "string"
+        },
+        "netAppAccounts_location": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "allowedValues": [
+                "australiaeast",
+                "centralus",
+                "eastus",
+                "eastus2",
+                "northeurope",
+                "westeurope",
+                "southcentralus",
+                "westus2"
+            ]
+        },
+        "netAppAccounts_capacityPool_name": {
+            "defaultValue": "capacity-pool-1",
+            "type": "string"
+        },
+        "netAppAccounts_capacityPool_servicelevel": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "Standard",
+                "Premium",
+                "Ultra"
+            ],
+            "metadata": {
+                "description": "The service level of the file system. - Standard, Premium, Ultra"
+            }
+        },
+        "netAppAccounts_capacityPool_size": {
+            "type": "int",
+            "minValue": 4398046511104,
+            "maxValue": 549755813888000,
+            "defaultValue": 4398046511104,
+            "metadata": {
+                "description": "Provisioned size of the pool (in bytes). Allowed values are in 4TiB chunks (value must be multiply of 4398046511104)."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.NetApp/netAppAccounts/capacityPools",
+            "apiVersion": "2019-05-01",
+            "comments": "NetApp Capacity Pool Definition",
+            "name": "[concat(parameters('netAppAccounts_name'), '/', parameters('netAppAccounts_capacityPool_name'))]",
+            "location": "[parameters('netAppAccounts_location')]",
+            "properties": {
+                "serviceLevel": "[parameters('netAppAccounts_capacityPool_servicelevel')]",
+                "size": "[parameters('netAppAccounts_capacityPool_size')]"
+            }
+        }
+    ],
+    "outputs": {}
+}
